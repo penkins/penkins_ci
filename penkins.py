@@ -16,10 +16,16 @@ class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
 
+    def do_POST(self):
+        self.action()
+
     def do_GET(self):
         """
         respond to a GET-request
         """
+        self.action()
+
+    def action(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
