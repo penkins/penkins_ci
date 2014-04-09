@@ -13,7 +13,20 @@ Penkins created special for small PHP or Python projects. For big projects use J
 Installation
 ------------
 
-Soon...
+```
+# apt-get install supervisor
+# apt-get install python-git
+# apt-get install python-yaml
+```
+
+```
+# wget https://github.com/vanzhiganov/penkins/archive/master.zip
+# unzip master.zip
+# cp -r penkins-master/ /var/lib/penkins
+# cd /var/lib/penkins/
+# cp extra/supervisor.conf /etc/supervisor/conf.d/penkins.conf
+# supervisorctl reload
+```
 
 
 Configuration
