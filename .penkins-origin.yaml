@@ -1,7 +1,7 @@
 smtp:
 - {use: true, port: 25, host: mail.server.net, login: mailuser, password: megapassword}
 web:
-- {port: 8001}
+- {port: 8001, interface: '127.0.0.1'}
 - acl:
   - allow:
     - []
