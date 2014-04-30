@@ -7,16 +7,8 @@ import os
 import sys
 import subprocess
 import logging
-
-
-class PenkinsConfig:
-    def __init__(self, file_name='/var/lib/penkins/.penkins.yaml'):
-        self.config = self.__read(file_name)
-
-    def __read(self, config_file):
-        if os.path.isfile('.penkins.yaml'):
-            config = yaml.load(open('.penkins.yaml', 'r'))
-        return config
+from penkins import PenkinsConfig
+from penkins import PenkinsMail
 
 
 class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -63,6 +55,8 @@ class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
                 log = git.cmd.Git(task['path']).pull()
 
+                PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
+
                 # log_file = open('log/%s.log' % project_name, 'w')
                 # log_file.write(log)
                 # log_file.write('\n---\n')
@@ -75,6 +69,7 @@ class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
             y_doc.close()
         else:
             logging.error('project %s not found' % project_name)
+
 
 if __name__ == '__main__':
     # TODO: add conditions
