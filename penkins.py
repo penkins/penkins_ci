@@ -6,8 +6,17 @@ import BaseHTTPServer
 import os
 import sys
 import subprocess
+import logging
 
-PORT = 8001
+
+class PenkinsConfig:
+    def __init__(self, file_name='/var/lib/penkins/.penkins.yaml'):
+        self.config = self.__read(file_name)
+
+    def __read(self, config_file):
+        if os.path.isfile('.penkins.yaml'):
+            config = yaml.load(open('.penkins.yaml', 'r'))
+        return config
 
 
 class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -64,10 +73,30 @@ class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
             y_doc = open('ci/%s.yaml' % project_name, 'w')
             y_doc.write(yaml.dump(task))
             y_doc.close()
+        else:
+            logging.error('project %s not found' % project_name)
 
 if __name__ == '__main__':
+    # TODO: add conditions
+    # if sys.argv[2]:
+    #     if os.path.isfile(sys.argv[2]):
+    #         logging.debug('config: %s' % sys.argv[2])
+    #         config_file = sys.argv[2]
+    #     else:
+    #         logging.debug('config: %s' % sys.argv[2])
+    #         config_file = '.penkins.yaml'
+    #
+    #     # check exists config file
+    #     if not os.path.isfile(sys.argv[2]):
+    #         logging.error('config: %s not exists' % sys.argv[2])
+
+    config = PenkinsConfig('.penkins.yaml')
+
+    logging.basicConfig(filename='log/debug.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.debug('start web server: %s:%s' % (config.config['web'][0]['interface'], config.config['web'][0]['port']))
+
     server_class = BaseHTTPServer.HTTPServer
-    httpd = server_class(("", PORT), PenkinsWebServer)
+    httpd = server_class((config.config['web'][0]['interface'], config.config['web'][0]['port']), PenkinsWebServer)
 
     httpd.serve_forever()
     httpd.server_close()
