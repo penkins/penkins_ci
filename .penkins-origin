@@ -1,2 +1,9 @@
 smtp:
 - {use: true, port: 25, host: mail.server.net, login: mailuser, password: megapassword}
+web:
+- {port: 8001}
+- acl:
+  - allow:
+    - []
+  - deny:
+    - []
