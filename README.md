@@ -15,8 +15,10 @@ Installation
 
 ```
 # apt-get install supervisor
+# apt-get install python-pip
 # apt-get install python-git
 # apt-get install python-yaml
+# pip install mercurial
 ```
 
 ```
