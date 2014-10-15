@@ -9,6 +9,8 @@ like Jenkins =), but Jenkins written in Java and Penkis in Python.
 
 Penkins created special for small PHP or Python projects. For big projects use Jenkins better.
 
+![Mr. Penkins](https://avatars1.githubusercontent.com/u/7437554?v=2&s=500)
+
 
 Installation
 ------------
