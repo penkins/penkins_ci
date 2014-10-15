@@ -34,7 +34,7 @@ Installation
 Configuration
 -------------
 
-Example configuration
+## Example configuration
 
 ```
 work: update
@@ -59,3 +59,31 @@ Description
 `build_count`: auto incremental counter
 
 `path`: path to repository cloning. if using `work: build` then path build automatically like `build/test/4`. if using `work: update` then path stay not changed `build`.
+
+## Supervisor configuration
+
+```
+[program:penkins]
+directory=/var/lib/penkins
+autostart=true
+autorestart=true
+startsecs=1
+startretries=777
+exitcodes=0,2
+stopsignal=TERM
+stopwaitsecs=1
+user=www-data
+group=www-data
+command=manage.py
+redirect_stderr=false
+
+stdout_logfile=/var/log/penkins_out.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=10MB
+
+stderr_logfile=/var/log/penkins_err.log
+stderr_logfile_maxbytes=1MB
+stderr_logfile_backups=10
+stderr_capture_maxbytes=10MB
+```
