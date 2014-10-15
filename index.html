@@ -43,8 +43,10 @@ like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <pre><code># apt-get install supervisor
+# apt-get install python-pip
 # apt-get install python-git
 # apt-get install python-yaml
+# pip install mercurial
 </code></pre>
 
 <pre><code># wget https://github.com/vanzhiganov/penkins/archive/master.zip
@@ -58,7 +60,59 @@ like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
 <h2>
 <a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
-<p>Soon...</p>
+<h2>
+<a name="example-configuration" class="anchor" href="#example-configuration"><span class="octicon octicon-link"></span></a>Example configuration</h2>
+
+<pre><code>work: update
+vcs: git
+repository: git@github.com:vanzhiganov/penka.git
+before: [echo 'before']
+after: [echo 'after']
+build_count: 4
+path: build/test/4
+</code></pre>
+
+<p>Description</p>
+
+<p><code>vcs</code>: <code>git</code> or <code>mercurial</code></p>
+
+<p><code>repository</code>: url or path to repository</p>
+
+<p><code>before</code>: CLI command executed before repository updated</p>
+
+<p><code>after</code>: CLI command executed after repository updated</p>
+
+<p><code>build_count</code>: auto incremental counter</p>
+
+<p><code>path</code>: path to repository cloning. if using <code>work: build</code> then path build automatically like <code>build/test/4</code>. if using <code>work: update</code> then path stay not changed <code>build</code>.</p>
+
+<h2>
+<a name="supervisor-configuration" class="anchor" href="#supervisor-configuration"><span class="octicon octicon-link"></span></a>Supervisor configuration</h2>
+
+<pre><code>[program:penkins]
+directory=/var/lib/penkins
+autostart=true
+autorestart=true
+startsecs=1
+startretries=777
+exitcodes=0,2
+stopsignal=TERM
+stopwaitsecs=1
+user=www-data
+group=www-data
+command=manage.py
+redirect_stderr=false
+
+stdout_logfile=/var/log/penkins_out.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=10MB
+
+stderr_logfile=/var/log/penkins_err.log
+stderr_logfile_maxbytes=1MB
+stderr_logfile_backups=10
+stderr_capture_maxbytes=10MB
+</code></pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/penkins">penkins</a></p>
