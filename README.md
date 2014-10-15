@@ -34,4 +34,23 @@ Installation
 Configuration
 -------------
 
-Soon...
+Example configuration
+
+```
+work: update
+vcs: git
+repository: git@github.com:vanzhiganov/penka.git
+before: [echo 'before']
+after: [echo 'after']
+build_count: 4
+path: build/test/4
+```
+
+Description
+
+`vcs`: `git` or `mercurial`
+`repository`: url or path to repository
+`before`: CLI command executed before repository updated
+`after`: CLI command executed after repository updated
+`build_count`: auto incremental counter
+`path`: path to repository cloning. if using `work: build` then path build automatically like `build/test/4`. if using `work: update` then path stay not changed `build`.
