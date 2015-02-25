@@ -93,9 +93,12 @@ stderr_capture_maxbytes=10MB
 
 ## Configuration for work with Mercurial
 
-Create `.hgrc` file in home directory. For example under user `root`:
+Create `.hgrc` file in home directory. For example under user `www-data`:
 
-`touch /root/.hgrc`
+`touch /var/www/.hgrc`
+
+**Attention!** File .hgrc located in /var/www directory it is bad idea.
+For more information about .hgrc file please RTFM - http://www.selenic.com/mercurial/hgrc.5.html
 
 and put
 
