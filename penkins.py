@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import git
+import hgapi
 import yaml
 import BaseHTTPServer
 import os
@@ -9,6 +10,16 @@ import subprocess
 import logging
 from penkins import PenkinsConfig
 from penkins import PenkinsMail
+
+# repo = hgapi.Repo("http://repo.10k.anzhiganov.com/stackwebservices/id/server", "vanzhiganov")
+
+# clone
+# repo = hgapi.Repo("http://vanzhiganov@repo.10k.anzhiganov.com/stackwebservices/id/server")
+# tek = repo.hg_clone("http://vanzhiganov@repo.10k.anzhiganov.com/stackwebservices/id/server", "/tmp/test_server2")
+
+# pull
+# repo = hgapi.Repo("/tmp/test_server2")
+# repo.hg_pull("/tmp/test_server2")
 
 
 class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -46,14 +57,28 @@ class PenkinsWebServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
                 # TODO: execute commands 'before'
 
-                git.Git().clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
+                if task['vcs'] == "git":
+                    git.Git().clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
+                elif task['vcs'] == "hg":
+                    # clone
+                    repo = hgapi.Repo(task['repository'])
+                    repo.hg_clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
                 # print "clone"
+                else:
+                    print "CVS engine not specified for this task"
 
                 # TODO: execute commands 'after'
             elif task['work'] == 'update':
                 # TODO: execute commands 'before'
 
-                log = git.cmd.Git(task['path']).pull()
+                if task['cvs'] == "git":
+                    log = git.cmd.Git(task['path']).pull()
+                elif task['cvs'] == "hg":
+                    # pull
+                    repo = hgapi.Repo(task['path'])
+                    repo.hg_pull(task['path'])
+                else:
+                    print "CVS engine not specified for this task"
 
                 PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
 
@@ -85,6 +110,8 @@ if __name__ == '__main__':
     #     if not os.path.isfile(sys.argv[2]):
     #         logging.error('config: %s not exists' % sys.argv[2])
 
+    # TODO: add the ability to specified config file from CLI param
+    # TODO: check exists config file
     config = PenkinsConfig('.penkins.yaml')
 
     logging.basicConfig(filename='log/debug.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
