@@ -34,7 +34,7 @@
 <a id="wtf-is-penkins" class="anchor" href="#wtf-is-penkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>WTF is Penkins?!</h2>
 
 <p>Penkins is a very small and easy to use continuous integration (CI) tool,
-like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
+like Jenkins =), but Jenkins written in Java and Penkins in Python.</p>
 
 <p>Penkins created special for small PHP or Python projects. For big projects use Jenkins better.</p>
 
@@ -113,6 +113,45 @@ stderr_logfile=/var/log/penkins_err.log
 stderr_logfile_maxbytes=1MB
 stderr_logfile_backups=10
 stderr_capture_maxbytes=10MB
+</code></pre>
+
+<h2>
+<a id="configuration-for-work-with-mercurial" class="anchor" href="#configuration-for-work-with-mercurial" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration for work with Mercurial</h2>
+
+<p>Create <code>.hgrc</code> file in home directory. For example under user <code>www-data</code>:</p>
+
+<p><code>touch /var/www/.hgrc</code></p>
+
+<p><strong>Attention!</strong> File .hgrc located in /var/www directory it is bad idea.
+For more information about .hgrc file please RTFM - <a href="http://www.selenic.com/mercurial/hgrc.5.html">http://www.selenic.com/mercurial/hgrc.5.html</a></p>
+
+<p>and put</p>
+
+<pre><code>[auth]
+bb.prefix = https://bitbucket.org
+bb.username = {username}
+bb.password = {password}
+</code></pre>
+
+<p>or</p>
+
+<pre><code>[auth]
+bb1.prefix = https://bitbucket.org/foo/
+bb1.username = foo
+bb1.password = foo_passwd
+
+bb2.prefix = https://bitbucket.org/bar/
+bb2.username = bar
+bb2.password = bar_passwd
+</code></pre>
+
+<p>or</p>
+
+<pre><code>[auth]
+bb.prefix = bitbucket.org
+bb.username = foo
+bb.password = foo_passwd
+bb.schemes = http https
 </code></pre>
       </section>
     </div>
