@@ -7,7 +7,9 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -17,22 +19,19 @@
       <header>
         <h1>Penkins</h1>
         <p>Penkins is a very small and easy to use continuous integration (CI) tool, like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
-
-        <p class="view"><a href="https://github.com/penkins/penkins">View the Project on GitHub <small>penkins/penkins</small></a></p>
-
-
+        <p class="view"><a href="https://github.com/penkins/penkins_ci">View the Project on GitHub <small>penkins/penkins_ci</small></a></p>
         <ul>
-          <li><a href="https://github.com/penkins/penkins/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/penkins/penkins/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/penkins/penkins">View On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/penkins/penkins_ci/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/penkins/penkins_ci/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/penkins/penkins_ci">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
         <h1>
-<a name="penkins" class="anchor" href="#penkins"><span class="octicon octicon-link"></span></a>PENKINS</h1>
+<a id="penkins" class="anchor" href="#penkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>PENKINS</h1>
 
 <h2>
-<a name="wtf-is-penkins" class="anchor" href="#wtf-is-penkins"><span class="octicon octicon-link"></span></a>WTF is Penkins?!</h2>
+<a id="wtf-is-penkins" class="anchor" href="#wtf-is-penkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>WTF is Penkins?!</h2>
 
 <p>Penkins is a very small and easy to use continuous integration (CI) tool,
 like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
@@ -42,7 +41,7 @@ like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
 <p><img src="https://avatars1.githubusercontent.com/u/7437554?v=2&amp;s=500" alt="Mr. Penkins"></p>
 
 <h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <pre><code># apt-get install supervisor
 # apt-get install python-pip
@@ -60,10 +59,10 @@ like Jenkins =), but Jenkins written in Java and Penkis in Python.</p>
 </code></pre>
 
 <h2>
-<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
 <h2>
-<a name="example-configuration" class="anchor" href="#example-configuration"><span class="octicon octicon-link"></span></a>Example configuration</h2>
+<a id="example-configuration" class="anchor" href="#example-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example configuration</h2>
 
 <pre><code>work: update
 vcs: git
@@ -89,7 +88,7 @@ path: build/test/4
 <p><code>path</code>: path to repository cloning. if using <code>work: build</code> then path build automatically like <code>build/test/4</code>. if using <code>work: update</code> then path stay not changed <code>build</code>.</p>
 
 <h2>
-<a name="supervisor-configuration" class="anchor" href="#supervisor-configuration"><span class="octicon octicon-link"></span></a>Supervisor configuration</h2>
+<a id="supervisor-configuration" class="anchor" href="#supervisor-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supervisor configuration</h2>
 
 <pre><code>[program:penkins]
 directory=/var/lib/penkins
@@ -116,12 +115,12 @@ stderr_logfile_backups=10
 stderr_capture_maxbytes=10MB
 </code></pre>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/penkins">penkins</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/penkins">penkins</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
