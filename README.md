@@ -89,3 +89,43 @@ stderr_logfile_maxbytes=1MB
 stderr_logfile_backups=10
 stderr_capture_maxbytes=10MB
 ```
+
+
+## Configuration for work with Mercurial
+
+Create `.hgrc` file in home directory. For example under user `root`:
+
+`touch /root/.hgrc`
+
+and put
+
+```
+[auth]
+bb.prefix = https://bitbucket.org
+bb.username = {username}
+bb.password = {password}
+```
+
+or
+
+```
+[auth]
+bb1.prefix = https://bitbucket.org/foo/
+bb1.username = foo
+bb1.password = foo_passwd
+
+bb2.prefix = https://bitbucket.org/bar/
+bb2.username = bar
+bb2.password = bar_passwd
+```
+
+or
+
+```
+[auth]
+bb.prefix = bitbucket.org
+bb.username = foo
+bb.password = foo_passwd
+bb.schemes = http https
+```
+
