@@ -8,9 +8,8 @@ import os
 import sys
 import subprocess
 import logging
-from penkins.__init__ import PenkinsConfig
-from penkins.__init__ import PenkinsMail
-#remove this line
+from penkins import PenkinsConfig
+from penkins import PenkinsMail
 
 # repo = hgapi.Repo("http://repo.10k.anzhiganov.com/stackwebservices/id/server", "vanzhiganov")
 
