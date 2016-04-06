@@ -8,7 +8,6 @@ import os
 import sys
 import subprocess
 import logging
-<<<<<<< HEAD
 from penkins.__init__ import PenkinsConfig
 from penkins.__init__ import PenkinsMail
 
