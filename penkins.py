@@ -10,7 +10,7 @@ import subprocess
 import logging
 from penkins import PenkinsConfig
 from penkins import PenkinsMail
-
+#hooray!
 # repo = hgapi.Repo("http://repo.10k.anzhiganov.com/stackwebservices/id/server", "vanzhiganov")
 
 # clone
