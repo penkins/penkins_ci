@@ -10,6 +10,7 @@ class PenkinsConfig:
         self.config = self.__read(file_name)
 
     def __read(self, config_file):
+        config = yaml.load(open('.penkins-origin.yaml', 'r'))
         if os.path.isfile('.penkins.yaml'):
             config = yaml.load(open('.penkins.yaml', 'r'))
         return config
