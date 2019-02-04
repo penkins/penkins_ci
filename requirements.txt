@@ -1,5 +1,8 @@
 flask
 flask-restful
 pyyaml
-mercurial
-python-git
+# mercurial
+# python-git
+gitpython
+tinydb
+jsonschema

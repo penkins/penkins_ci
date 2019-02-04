@@ -6,13 +6,18 @@ import sys
 import subprocess
 import logging
 
-import pygit as git
-# import hgapi
+import git
 import yaml
 from flask import Flask, request
 from flask_restful import Api, Resource
+from tinydb import TinyDB, Query
+import jsonschema
+
 from penkins import PenkinsConfig
 from penkins import PenkinsMail
+
+
+db = TinyDB('ci/projects.json')
 
 
 class ProjectsResource(Resource):
@@ -36,23 +41,51 @@ class ProjectsResource(Resource):
             "name": "test1",
             "vcs": "git",
             "repository": "git@github.com:vanzhiganov/penka.git",
+            "branch": ""
             ""
         }
         """
-        name = request.json.get('name')
-        if os.path.exists(name):
-            return {
-                'status': {
-                    'code': 1,
-                    'message': 'already exists'
+        try:
+            jsonschema.validate(
+                request.json,
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                            # TODO: regex
+                        },
+                        "vcs": {"type": "string"},
+                        "repository": {"type": "string"},
+                    },
+                    "required": [
+                        "name", "vcs", "repository"
+                    ]
                 }
-            }
-        # TODO: create config file
+            )
+        except Exception as e:
+            print(e)
+            return {}
 
-        return {}
+        name = request.json.get('name')
 
-    def delete(self):
+        if len(db.search(Query().name == name)) == 0:
+            db.insert(request.json)
+        else:
+            return {'status': {'code': 1, 'message': 'already exists'}}
+        return {'status': {'code': 0, 'message': 'success'}}
+
+
+class ProjectResource(Resource):
+    def get(self, name):
+        return {
+            'item': db.get(Query().name == name)
+        }
+
+    def delete(self, name):
         """delete project and all builds"""
+        db.remove(Query().name == name)
+        # os.unlink('ci/{}.json'.format(name))
         return {}
 
 
@@ -62,57 +95,47 @@ class BuildResource(Resource):
             'project_name': project_name
         }
 
-    def post(self, project_name):
-        if os.path.isfile('ci/%s.yaml' % project_name):
-            task = yaml.load(open('ci/%s.yaml' % project_name, 'r'))
-            # print task
+    def post(self, name):
+        project = db.get(Query().name == name)
+        if not project:
+            return {}
 
-            if task['work'] == 'build':
-                if 'build_count' in task:
-                    task['build_count'] += 1
-                else:
-                    task['build_count'] = 1
-
-                # TODO: execute commands 'before'
-
-                if task['vcs'] == "git":
-                    # git.update
-                    git.clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
-                elif task['vcs'] == "hg":
-                    # clone
-                    repo = hgapi.Repo(task['repository'])
-                    repo.hg_clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
-                # print "clone"
-                else:
-                    print("CVS engine not specified for this task")
-
-                # TODO: execute commands 'after'
-            elif task['work'] == 'update':
-                # TODO: execute commands 'before'
-
-                if task['cvs'] == "git":
-                    log = git.cmd.Git(task['path']).pull()
-                elif task['cvs'] == "hg":
-                    # pull
-                    repo = hgapi.Repo(task['path'])
-                    repo.hg_pull(task['path'])
-                else:
-                    print("CVS engine not specified for this task")
-
-                PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
-
-                # log_file = open('log/%s.log' % project_name, 'w')
-                # log_file.write(log)
-                # log_file.write('\n---\n')
-                # log_file.close()
-
-                # TODO: execute commands 'after'
-
-            y_doc = open('ci/%s.yaml' % project_name, 'w')
-            y_doc.write(yaml.dump(task))
-            y_doc.close()
+        if project.vcs == "git":
+            git.Git("ci/test1").clone("https://github.com/myscrapyard/test1.git")
+        # elif task['vcs'] == "hg":
+        #         # clone
+        #         repo = hgapi.Repo(task['repository'])
+        #         repo.hg_clone(task['repository'], "%s/%s/%s" % (task['path'], project_name, task['build_count']))
+        #     print "clone"
         else:
-            logging.error('project %s not found' % project_name)
+            print("CVS engine not specified for this task")
+
+            # TODO: execute commands 'after'
+        elif task['work'] == 'update':
+            # TODO: execute commands 'before'
+
+            if task['cvs'] == "git":
+                log = git.cmd.Git(task['path']).pull()
+            # elif task['cvs'] == "hg":
+            #     # pull
+            #     repo = hgapi.Repo(task['path'])
+            #     repo.hg_pull(task['path'])
+            else:
+                print("CVS engine not specified for this task")
+
+            PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
+
+            # log_file = open('log/%s.log' % project_name, 'w')
+            # log_file.write(log)
+            # log_file.write('\n---\n')
+            # log_file.close()
+
+            # TODO: execute commands 'after'
+
+        y_doc = open('ci/%s.yaml' % project_name, 'w')
+        y_doc.write(yaml.dump(task))
+        y_doc.close()
+
         return {
             'project_name': project_name
         }
@@ -124,8 +147,9 @@ api = Api(app)
 
 # projects
 api.add_resource(ProjectsResource, '/')
+api.add_resource(ProjectResource, '/<name>')
 # build
-api.add_resource(BuildResource, '/<project_name>')
+# api.add_resource(BuildResource, '/<project_name>')
 
 
 if __name__ == '__main__':
