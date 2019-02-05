@@ -6,11 +6,10 @@ import datetime
 
 
 class PenkinsConfig:
-    def __init__(self, file_name='/var/lib/penkins/.penkins.yaml'):
-        self.config = self.__read(file_name)
+    def __init__(self, config):
+        self.config = self.__read(config)
 
-    def __read(self, config_file):
-        if os.path.isfile('.penkins.yaml'):
-            config = yaml.load(open('.penkins.yaml', 'r'))
+    def __read(self, config):
+        if os.path.isfile(config):
+            config = yaml.load(open(config, 'r'))
         return config
-
