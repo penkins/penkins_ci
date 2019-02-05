@@ -34,12 +34,12 @@ class BuildResource(Resource):
 
         if project.get('vcs') == "git":
             g1 = git.Git('builds/{}/{}/build/'.format(name, build_id))
-            g1.clone(project.get('repository'))
+            g1.clone(project.get('repository'), '.')
 
         # Read .penkins-ci.yml file
         # https://docs.gitlab.com/ee/ci/yaml/
         if os.path.exists('builds/{}/{}/build/.penkins.yml'.format(name, build_id)):
-            pc = PenkinsConfig('builds/{}/{}/build/.penkins.yml'.format(name, build_id))
+            pc = PenkinsConfig('builds/{}/{}/build/.penkins.yml'.format(name, build_id)).config
             print(pc)
 
         return {
