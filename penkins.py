@@ -78,15 +78,22 @@ class ProjectsResource(Resource):
 
 class ProjectResource(Resource):
     def get(self, name):
+        if not db.get(Query().name == name):
+            return {'status': {'code': 2, 'message': 'not found'}}
+
         return {
             'item': db.get(Query().name == name)
         }
 
+    # TODO: update
+
     def delete(self, name):
         """delete project and all builds"""
+        if not db.get(Query().name == name):
+            return {'status': {'code': 2, 'message': 'not found'}}
         db.remove(Query().name == name)
         # os.unlink('ci/{}.json'.format(name))
-        return {}
+        return {'status': {'code': 0, 'message': 'success'}}
 
 
 class BuildResource(Resource):
@@ -110,27 +117,27 @@ class BuildResource(Resource):
         else:
             print("CVS engine not specified for this task")
 
-            # TODO: execute commands 'after'
-        elif task['work'] == 'update':
-            # TODO: execute commands 'before'
+        #     # TODO: execute commands 'after'
+        # elif task['work'] == 'update':
+        #     # TODO: execute commands 'before'
 
-            if task['cvs'] == "git":
-                log = git.cmd.Git(task['path']).pull()
-            # elif task['cvs'] == "hg":
-            #     # pull
-            #     repo = hgapi.Repo(task['path'])
-            #     repo.hg_pull(task['path'])
-            else:
-                print("CVS engine not specified for this task")
+        #     if task['cvs'] == "git":
+        #         log = git.cmd.Git(task['path']).pull()
+        #     # elif task['cvs'] == "hg":
+        #     #     # pull
+        #     #     repo = hgapi.Repo(task['path'])
+        #     #     repo.hg_pull(task['path'])
+        #     else:
+        #         print("CVS engine not specified for this task")
 
-            PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
+        #     PenkinsMail().send_mail(task['email'], 'project %s has pulled' % task['name'], log)
 
-            # log_file = open('log/%s.log' % project_name, 'w')
-            # log_file.write(log)
-            # log_file.write('\n---\n')
-            # log_file.close()
+        #     # log_file = open('log/%s.log' % project_name, 'w')
+        #     # log_file.write(log)
+        #     # log_file.write('\n---\n')
+        #     # log_file.close()
 
-            # TODO: execute commands 'after'
+        #     # TODO: execute commands 'after'
 
         y_doc = open('ci/%s.yaml' % project_name, 'w')
         y_doc.write(yaml.dump(task))
@@ -149,7 +156,7 @@ api = Api(app)
 api.add_resource(ProjectsResource, '/')
 api.add_resource(ProjectResource, '/<name>')
 # build
-# api.add_resource(BuildResource, '/<project_name>')
+api.add_resource(BuildResource, '/<name>/build')
 
 
 if __name__ == '__main__':
