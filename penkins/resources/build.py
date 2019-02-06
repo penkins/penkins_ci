@@ -1,5 +1,6 @@
 import os
 import git
+import subprocess
 from flask_restful import Resource
 from penkins.db import db, Query, TinyDB
 from tinydb.operations import increment
@@ -41,7 +42,9 @@ class BuildResource(Resource):
         if os.path.exists('builds/{}/{}/build/.penkins.yml'.format(name, build_id)):
             pc = PenkinsConfig('builds/{}/{}/build/.penkins.yml'.format(name, build_id)).config
             print(pc)
-
+            # scripts
+            for cmd in pc.get('script'):
+                subprocess.call(cmd.split(' '), cwd='builds/{}/{}/build/'.format(name, build_id), shell=True)
         return {
             'project_name': name
         }
