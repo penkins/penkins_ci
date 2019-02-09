@@ -11,40 +11,42 @@ class BuildResource(Resource):
     def get(self, name):
         project = db.get(Query().name == name)
 
-        if not os.path.exists('builds/{}'.format(name)):
-            os.mkdir('builds/{}'.format(name))
-        if not os.path.exists('builds/{}'.format(name)):
-            os.mkdir('builds/{}'.format(name))
+        build_path = '{}/.penkins/builds/{}'.format(os.path.expanduser('~'), name)
 
-        is_init = os.path.exists('builds/{}/builds.json'.format(name))
+        if not os.path.exists(build_path):
+            os.mkdir(build_path)
+        builds_db = '{}/builds.json'.format(build_path)
 
-        dbbuils = TinyDB('builds/{}/builds.json'.format(name))
+        dbbuils = TinyDB('{}/builds.json'.format(build_path))
 
-        if is_init:
+        if os.path.exists(builds_db):
             dbbuils.insert({'counter': 0})
 
         dbbuils.update(increment('counter'))
 
         build_id = dbbuils.get(Query().counter).get('counter')
 
-        if os.path.exists('builds/{}/{}'.format(name, build_id)):
-            os.rmdir('builds/{}/{}'.format(name, build_id))
-        if not os.path.exists('builds/{}/{}'.format(name, build_id)):
-            os.mkdir('builds/{}/{}'.format(name, build_id))
-            os.mkdir('builds/{}/{}/build'.format(name, build_id))
+        if os.path.exists('{}/{}'.format(build_path, build_id)):
+            os.rmdir('{}/{}'.format(build_path, build_id))
+        if not os.path.exists('{}/{}'.format(build_path, build_id)):
+            os.mkdir('{}/{}'.format(build_path, build_id))
+            os.mkdir('{}/{}/build'.format(build_path, build_id))
 
         if project.get('vcs') == "git":
-            g1 = git.Git('builds/{}/{}/build/'.format(name, build_id))
+            g1 = git.Git('{}/{}/build/'.format(build_path, build_id))
             g1.clone(project.get('repository'), '.')
 
         # Read .penkins-ci.yml file
         # https://docs.gitlab.com/ee/ci/yaml/
-        if os.path.exists('builds/{}/{}/build/.penkins.yml'.format(name, build_id)):
-            pc = PenkinsConfig('builds/{}/{}/build/.penkins.yml'.format(name, build_id)).config
-            print(pc)
+        if os.path.exists('{}/{}/build/.penkins.yml'.format(build_path, build_id)):
+            pc = PenkinsConfig('{}/{}/build/.penkins.yml'.format(build_path, build_id)).config
+            # print(pc)
             # scripts
             for cmd in pc.get('script'):
-                subprocess.call(cmd.split(' '), cwd='builds/{}/{}/build/'.format(name, build_id), shell=True)
+                # print('{}/{}/build/'.format(build_path, build_id))
+                # print(cmd)
+                # print(cmd.split(' '))
+                subprocess.call(cmd, cwd='{}/{}/build/'.format(build_path, build_id), shell=True)
         return {
             'project_name': name
         }

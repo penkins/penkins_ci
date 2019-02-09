@@ -6,3 +6,4 @@ pyyaml
 gitpython
 tinydb
 jsonschema
+uwsgi

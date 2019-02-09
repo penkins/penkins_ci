@@ -14,17 +14,13 @@ import jsonschema
 from penkins import PenkinsConfig
 from penkins import PenkinsMail
 from penkins.db import db, Query
+from penkins.controller import Projects
 
 
 class ProjectsResource(Resource):
     def get(self):
         """list projects"""
-        items = []
-        pattern = re.compile(r'^[a-zA-Z0-9]{1,32}\.yml$')
-        for root, dirs, files in os.walk("./ci"):
-            for filename in files:
-                if pattern.match(filename):
-                    items.append(filename)
+        items = Projects().get_all()
         return {
             'items': items,
             'total': len(items)
@@ -65,7 +61,12 @@ class ProjectsResource(Resource):
 
         name = request.json.get('name')
 
-        if len(db.search(Query().name == name)) == 0:
+        pr = Projects()
+
+        if not pr.validate_name(name):
+            return {'status': {'code': 2, 'mesage': 'invalid project name format'}}
+
+        if not pr.is_exists(name):
             db.insert(request.json)
         else:
             return {'status': {'code': 1, 'message': 'already exists'}}
