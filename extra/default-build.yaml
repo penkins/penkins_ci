@@ -1,7 +1,0 @@
-after: [echo 'buy']
-before: [echo 'hello']
-build_count: 3
-path: build
-vcs: git
-repository: git@github.com:vanzhiganov/penka.git
-work: build

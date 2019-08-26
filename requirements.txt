@@ -1,3 +1,9 @@
 flask
 flask-restful
 pyyaml
+# mercurial
+# python-git
+gitpython
+tinydb
+jsonschema
+uwsgi

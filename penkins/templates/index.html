@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Penkins Status</title>
+  <link href="static/stylesheets/penkins.css" rel="stylesheet" type="text/css" />
+  <link href="static/images/icon.png" rel="icon" type="image/png" />
+</head>
+<body>
+<div id="wrapper">
+  <div id="header">
+    <img alt="Penkins status" src="static/images/penkins.png" />
+  </div>
+  <div>
+    <div class="hidden">#</div>
+    <form action="index.html" method="post">
+      <ul class="clr" id="buttons">
+        <li id="refresh"><a href="index.html?action=refresh">&nbsp;</a></li>
+        <li id="restart_all"><a href="index.html?action=restartall">&nbsp;</a></li>
+        <li id="stop_all"><a href="index.html?action=stopall">&nbsp;</a></li>
+      </ul>
+      <table cellspacing="0">
+        <thead>
+          <tr>
+            <th class="state">State</th>
+            <th class="name">Name</th>
+            <th class="desc">Description</th>
+            <th class="action">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+          <tr class="">
+            <td class="status"><span class="statusnominal">warn</span></td>
+            <td><a href="builds.html?project={{ project.get('name') }}" target="_blank">{{ project.get('name') }}</a></td>
+            <td><span>Feb 03 02:00 PM</span></td>
+            <td class="action">
+              <ul>
+                <li>
+                  <a href="build.html?project={{ project.get('name') }}&amp;action=start" name="Start">Start</a>
+                </li>
+              <li>
+                  <a href="log.html?processname={{ project.get('name') }}&amp;action=log" name="Clear Log">Last build log</a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="push">
+  </div>
+</div>
+
+<div class="clr" id="footer">
+  <div class="left">
+    <a href="http://penkins.org">Penkins</a> <span>3.3.1</span>
+  </div>
+  <div class="right">
+    &copy; <span>2019</span> <strong><a href="http://stackwebservices.com/">stack web services</a></strong>
+  </div>
+</div>
+</body>
+</html>
